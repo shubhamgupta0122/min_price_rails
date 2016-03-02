@@ -1,0 +1,36 @@
+<h1>Searching for - <%= @search_term %></h1>
+
+<% if @sites.nil? %>
+
+	<p>Some Error Occured. Please Try Again after some time</p>
+
+<% else %>
+
+	<table border='1'>
+
+		<thead>
+			<tr>
+				<th>Site Name</th>
+				<th>Image</th>
+				<th>Item Name</th>
+				<th>Price in Rs. (₹)</th>
+			</tr>
+		</thead>
+
+		<tbody>
+			<% @sites.each do |site| %>
+				<tr class=<%= cycle('even', 'odd') %>>
+					<td><%= site[:site_name] %></td>
+					<td><%= image_tag(site[:item_img]) %></td>
+					<td><%= site[:item_name] %></td>
+					<td><%= site[:item_price] %></td>
+				</tr>
+			<% end %>
+		</tbody>
+
+	</table>
+
+<% end %>
+
+<p style="color: #9c1628"><b>Note:</b> Use the parameter <i>looking_for</i> to change the search parameter.</br>Example: </br><span style="font-family: monospace">https://minprice-rails.herokuapp.com/min_price/index?looking_for=gloves</span></br><span style="font-family: monospace">https://minprice-rails.herokuapp.com/min_price/index.json?looking_for=gloves</span></p>
+<p>An app by <b>Shubham Gupta</b></p>
