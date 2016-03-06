@@ -10,19 +10,24 @@ class MinPrice
 		qsite = @sites.select { |site| site[:name] == qsite }
 		qsite = qsite[0]
 
-		page = @agent .get ( qsite[:url] .sub("%s", qword) )
-		
-		name = page .at_xpath( qsite[:item_name] )
-		price = page .at_xpath( qsite[:item_price] )
-		image = page .at_xpath( qsite[:item_img] )
-		
-		if ( name && price )
-			name = name.text.strip
-			price = price.text.sub("Rs.","").delete(",").delete(" ").strip.to_i
-			image = image.attributes["src"].text
-			{site_name: qsite[:name], item_name: name, item_price: price, item_img: image}
-		else
-			e = "Error Occured"
+		begin
+			page = @agent .get ( qsite[:url] .sub("%s", qword) )
+			
+			name = page .at_xpath( qsite[:item_name] )
+			price = page .at_xpath( qsite[:item_price] )
+			image = page .at_xpath( qsite[:item_img] )
+			
+			if ( name && price )
+				name = name.text.strip
+				price = price.text.sub("Rs.","").delete(",").delete(" ").strip.to_i
+				image = image.attributes["src"].text
+				{site_name: qsite[:name], item_name: name, item_price: price, item_img: image}
+			else
+				e = "Error Occured"
+				{site_name: qsite[:name], item_name: e, item_price: e, item_img: e}
+			end
+		rescue
+			e = "500 - Internal Server Error"
 			{site_name: qsite[:name], item_name: e, item_price: e, item_img: e}
 		end
 	end
